@@ -70,12 +70,12 @@ func (t Tweet) GetFullText()string{
 	return t.FullText
 }
 
-func (t Tweet) DownloadMediaTo(dirPath string) error{
+func (t Tweet) DownloadMediaTo(dirPath string) ([]string, error){
 	finfo, err := os.Stat(dirPath)
 	if err != nil || finfo.IsDir() == false{
-		err := os.Mkdir(dirPath, 0700)
+		err := os.Mkdir(dirPath, 0640)
 		if err != nil{
-			return errors.New("cannot create the directory")
+			return nil, errors.New("cannot create the directory")
 		}
 	}
 
@@ -84,36 +84,30 @@ func (t Tweet) DownloadMediaTo(dirPath string) error{
 	for _, url := range mediaURLs{
 		response, err := http.Get(url)
 		if err != nil {
-			return err
+			return mediaURLs, err
 		}
 		defer response.Body.Close()
 
 		if response.StatusCode != 200 {
-			return errors.New("Received non 200 response code")
+			return mediaURLs, errors.New("Received non 200 response code")
 		}
 
 		parts := strings.Split(url, "/")
 		fileName := parts[len(parts) - 1]
-		//Create a empty file
+
 		file, err := os.Create(path.Join(dirPath, fileName))
 		if err != nil {
-			return err
+			return mediaURLs, err
 		}
 		defer file.Close()
 
-		//Write the bytes to the fiel
 		_, err = io.Copy(file, response.Body)
 		if err != nil {
-			return err
+			return mediaURLs, err
 		}
 	}
 
-	return nil
-}
-
-func (t Tweet)DownloadMedia(){
-	dirPath := t.IdStr
-	t.DownloadMediaTo(dirPath)
+	return mediaURLs, nil
 }
 
 func (t Tweet)ContainsPhoto()bool{
