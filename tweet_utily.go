@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"fmt"
 )
 
 type SimpleUser struct{
@@ -42,7 +43,7 @@ func (t Tweet) GetUserMentions()[]SimpleUser{
 	return users
 }
 
-func (t Tweet) GetMedias()[]string{
+func (t Tweet) GetMediaURLs()[]string{
 	urls := []string{}
 	if t.ExtendedEntities.Media != nil{
 		for _, m := range t.ExtendedEntities.Media{
@@ -73,15 +74,16 @@ func (t Tweet) GetFullText()string{
 func (t Tweet) DownloadMediaTo(dirPath string) ([]string, error){
 	finfo, err := os.Stat(dirPath)
 	if err != nil || finfo.IsDir() == false{
-		err := os.Mkdir(dirPath, 0640)
+		err := os.Mkdir(dirPath, 0740)
 		if err != nil{
 			return nil, errors.New("cannot create the directory")
 		}
 	}
 
-	mediaURLs := t.GetMedias()
+	mediaURLs := t.GetMediaURLs()
+	fileNames := make([]string, len(mediaURLs))
 
-	for _, url := range mediaURLs{
+	for i, url := range mediaURLs{
 		response, err := http.Get(url)
 		if err != nil {
 			return mediaURLs, err
@@ -93,7 +95,8 @@ func (t Tweet) DownloadMediaTo(dirPath string) ([]string, error){
 		}
 
 		parts := strings.Split(url, "/")
-		fileName := parts[len(parts) - 1]
+		fileName := fmt.Sprintf("%v_%v_%v_%v", t.User.Id, t.User.ScreenName,t.Id,parts[len(parts) - 1])
+		fileNames[i] = fileName
 
 		file, err := os.Create(path.Join(dirPath, fileName))
 		if err != nil {
@@ -107,7 +110,7 @@ func (t Tweet) DownloadMediaTo(dirPath string) ([]string, error){
 		}
 	}
 
-	return mediaURLs, nil
+	return fileNames, nil
 }
 
 func (t Tweet)ContainsPhoto()bool{
