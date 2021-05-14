@@ -48,7 +48,7 @@ func (c *Connection) PublishTextTweetAsReply(text string, replyTweetID int64) (i
 	return tw.Id, err
 }
 
-func (c *Connection) publishMediaTweetGeneric(mediaType string, filePaths []string, text string, replyToTweetID int)(int64, error){
+func (c *Connection) publishMediaTweetGeneric(mediaType string, filePaths []string, text string, replyToTweetID int64)(int64, error){
 	c.InfoLog.Printf("*** Publishing of %v tweet with text: (%v) has initiated. ***\n", mediaType, text)
 
 	selectionMsg := ""
@@ -108,11 +108,11 @@ func (c *Connection) PublishCollageTweet(filePaths []string, text string) (int64
 	return c.publishMediaTweetGeneric(MediaCollage, filePaths, text, -1)
 }
 
-func (c *Connection) PublishPictureTweetAsReply(filepath string, text string, replyTweetID int) (int64, error){
+func (c *Connection) PublishPictureTweetAsReply(filepath string, text string, replyTweetID int64) (int64, error){
 	return c.publishMediaTweetGeneric(MediaPicture, []string{filepath}, text, replyTweetID)
 }
 
-func (c *Connection) PublishCollageTweetAsReply(filePaths []string, text string, replyTweetID int) (int64, error){
+func (c *Connection) PublishCollageTweetAsReply(filePaths []string, text string, replyTweetID int64) (int64, error){
 	return c.publishMediaTweetGeneric(MediaCollage, filePaths, text, replyTweetID)
 }
 
@@ -120,7 +120,7 @@ func (c *Connection) PublishVideoTweet(filepath string, text string) (int64,erro
 	return c.publishMediaTweetGeneric(MediaVideo, []string{filepath}, text, -1)
 }
 
-func (c *Connection) PublishVideoTweetAsReply(filepath string, text string, replyTweetID int) (int64,error){
+func (c *Connection) PublishVideoTweetAsReply(filepath string, text string, replyTweetID int64) (int64,error){
 	return c.publishMediaTweetGeneric(MediaVideo, []string{filepath}, text, replyTweetID)
 }
 

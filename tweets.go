@@ -116,6 +116,7 @@ func (c *Connection) GetRecentNMentions(n int)(Tweets, error){
 	}
 
 	values := url.Values{}
+	values.Add("screen_name", c.User.ScreenName)
 	return c.getRecentNEntityFromValues(n, entity, values)
 }
 
@@ -131,7 +132,8 @@ func (c *Connection) GetRecentNMentionsSince(n int, sinceID int64)(Tweets, error
 
 	values := url.Values{}
 	values.Set("since_id", fmt.Sprintf("%v", sinceID))
-	values.Set("since_id", fmt.Sprintf("%v", sinceID))
+	values.Set("screen_name", c.User.ScreenName)
+
 	return c.getRecentNEntityFromValues(n, entity, values)
 }
 
