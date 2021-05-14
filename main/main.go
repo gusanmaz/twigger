@@ -6,17 +6,17 @@ import (
 	"os"
 )
 
-func main(){
+func main() {
 	creds, err := twigger.LoadJSONCredentials("test_resources/real_login.json")
 
 	homeDir, _ := os.UserHomeDir()
 	homeDir = homeDir + "/"
 
-	logFile, _ := os.OpenFile(homeDir + "out.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	logFile, _ := os.OpenFile(homeDir+"out.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	defer logFile.Close()
 
-	conn,  err := twigger.NewConnection(creds, logFile, os.Stdout, os.Stderr)
-	if err != nil{
+	conn, err := twigger.NewConnection(creds, logFile, os.Stdout, os.Stderr)
+	if err != nil {
 		log.Fatalln("Cannot create a new connection!")
 	}
 
@@ -26,7 +26,7 @@ func main(){
 	tweets, _ := conn.GetAllRecentTweetsFromScreenName("BBCWorld")
 	tweets.Save(homeDir + "bbc_tweets.json")
 
-	favs, _   := conn.GetAllRecentFavoritesFromScreenName("philosophybites")
+	favs, _ := conn.GetAllRecentFavoritesFromScreenName("philosophybites")
 	favs.Save(homeDir + "philosophybites_favs.json")
 
 	friends, _ := conn.GetAllFriendsFromScreenName("twitterVideo")
@@ -48,7 +48,7 @@ func main(){
 		"test_resources/providence.jpg",
 	}
 
-	conn.PublishCollageTweet(picturePaths,"This is a test tweet and will be deleted soon.")
+	conn.PublishCollageTweet(picturePaths, "This is a test tweet and will be deleted soon.")
 	conn.PublishVideoTweet("test_resources/video.mp4", "this is a video test tweet and will be deleted in minutes.")
 
 }

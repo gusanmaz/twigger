@@ -9,18 +9,18 @@ import (
 	"os"
 )
 
-func main(){
+func main() {
 	InitCommand()
 
 	flag.StringVar(&outputFilePathFlag, "output", timelineOutputDefFilePath, timelineOutputFilePathUsage)
-	flag.StringVar(&outputFilePathFlag, "o", timelineOutputDefFilePath, timelineOutputFilePathUsage + shorthand)
+	flag.StringVar(&outputFilePathFlag, "o", timelineOutputDefFilePath, timelineOutputFilePathUsage+shorthand)
 
 	flag.IntVar(&nTimelineFlag, "n", nTimelineDef, nTimelineUsage)
 
 	flag.Parse()
 
 	creds, err := twigger.LoadJSONCredentials(credsFlag)
-	if err != nil{
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)
 	}
@@ -33,13 +33,13 @@ func main(){
 	conn.Client.SetLogger(anaconda.BasicLogger)
 
 	tweets, err := conn.GetRecentNHomeTimelineTweets(nTimelineFlag)
-	if err != nil{
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)
 	}
 
 	err = genjson.SaveDataTo(tweets, outputFilePathFlag)
-	if err != nil{
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "Cannot save timeline tweets of user %v into file %v", conn.User.ScreenName, outputFilePathFlag)
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)

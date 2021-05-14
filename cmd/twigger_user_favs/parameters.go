@@ -7,14 +7,14 @@ import (
 	"os"
 )
 
-const(
+const (
 	credsDefValue = "creds.json"
 	credsUsage    = "File path for Twitter API credentials. File should be in JSON or YAML format"
 
 	screenNameDefValue = ""
 	screenNameUsage    = "Screen name of the twitter user"
 
-	logFileDefPath = "/dev/null"
+	logFileDefPath   = "/dev/null"
 	logFilePathUsage = "Filepath for log file."
 
 	favOutputDefFilePath   = "user_favs.json"
@@ -35,55 +35,55 @@ const(
 	queryOutputDefFilePath   = "query.json"
 	queryOutputFilePathUsage = "Filepath for output file that consists of tweets with keyword"
 
-	nFavsDef = twigger.LimitFavs
+	nFavsDef   = twigger.LimitFavs
 	nFavsUsage = "Number of recent favorites asked for."
 
-	nTweetsDef = twigger.LimitTweets
+	nTweetsDef   = twigger.LimitTweets
 	nTweetsUsage = "Number of recent tweets asked for."
 
-	nTimelineDef = twigger.LimitTweets
+	nTimelineDef   = twigger.LimitTweets
 	nTimelineUsage = "Number of recent timeline tweets asked for."
 
-	nFollowersDef = -1 // All followers
+	nFollowersDef   = -1 // All followers
 	nFollowersUsage = "Number of followers asked for."
 
-	nFriendsDef = -1 // All friends
+	nFriendsDef   = -1 // All friends
 	nFriendsUsage = "Number of friends asked for."
 
-	keywordDef = "apple"
+	keywordDef   = "apple"
 	keywordUsage = "keyword to search for among tweets"
 
-	queryTypeDef = "top"
+	queryTypeDef   = "top"
 	queryTypeUsage = "type of the search for tweet search based on keyword. Valid values: [recent, top, mixed]"
 
 	shorthand = " (shorthand)"
 )
 
-var(
-	credsFlag string
-	screenNameFlag string
+var (
+	credsFlag          string
+	screenNameFlag     string
 	outputFilePathFlag string
-	logFilePathFlag string
-	nFavsFlag int
-	nTweetsFlag int
-	nFollowersFlag int
-	nFriendsFlag int
-	nTimelineFlag int
-	keywordFlag string
-	queryTypeFlag string
+	logFilePathFlag    string
+	nFavsFlag          int
+	nTweetsFlag        int
+	nFollowersFlag     int
+	nFriendsFlag       int
+	nTimelineFlag      int
+	keywordFlag        string
+	queryTypeFlag      string
 )
 
 var logFile *os.File
 
-func InitCommand(){
+func InitCommand() {
 	flag.StringVar(&credsFlag, "credentials", credsDefValue, credsUsage)
-	flag.StringVar(&credsFlag, "c", credsDefValue, credsUsage + shorthand)
+	flag.StringVar(&credsFlag, "c", credsDefValue, credsUsage+shorthand)
 
 	flag.StringVar(&logFilePathFlag, "log", logFileDefPath, logFilePathUsage)
-	flag.StringVar(&logFilePathFlag, "l", logFileDefPath, logFilePathUsage + shorthand)
+	flag.StringVar(&logFilePathFlag, "l", logFileDefPath, logFilePathUsage+shorthand)
 
 	logFile, err := os.OpenFile(logFilePathFlag, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil{
+	if err != nil {
 		fmt.Printf("Cannot open or create log file (%v)\n", logFilePathFlag)
 		fmt.Println("Program output will only be written to standard output and standard error.")
 	}

@@ -9,25 +9,25 @@ import (
 	"os"
 )
 
-func main(){
+func main() {
 	InitCommand()
 	flag.StringVar(&screenNameFlag, "screenname", screenNameDefValue, screenNameUsage)
-	flag.StringVar(&screenNameFlag, "s", screenNameDefValue, screenNameUsage + shorthand)
+	flag.StringVar(&screenNameFlag, "s", screenNameDefValue, screenNameUsage+shorthand)
 
 	flag.StringVar(&outputFilePathFlag, "output", tweetsOutputDefFilePath, tweetsOutputFilePathUsage)
-	flag.StringVar(&outputFilePathFlag, "o", tweetsOutputDefFilePath, tweetsOutputFilePathUsage + shorthand)
+	flag.StringVar(&outputFilePathFlag, "o", tweetsOutputDefFilePath, tweetsOutputFilePathUsage+shorthand)
 
 	flag.IntVar(&nTweetsFlag, "n", nTweetsDef, nTweetsUsage)
 
 	flag.Parse()
 
 	creds, err := twigger.LoadJSONCredentials(credsFlag)
-	if err != nil{
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)
 	}
 
-	conn,  err := twigger.NewConnection(creds, logFile, os.Stdout, os.Stderr)
+	conn, err := twigger.NewConnection(creds, logFile, os.Stdout, os.Stderr)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)
@@ -39,13 +39,13 @@ func main(){
 	}
 
 	tweets, err := conn.GetRecentNTweetsFromScreenName(screenNameFlag, nFavsFlag)
-	if err != nil{
+	if err != nil {
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)
 	}
 
 	err = genjson.SaveDataTo(tweets, outputFilePathFlag)
-	if err != nil{
+	if err != nil {
 		fmt.Fprintf(os.Stderr, "Cannot save tweets of user %v into file %v", screenNameFlag, outputFilePathFlag)
 		fmt.Fprintln(os.Stderr, "Terminating program...")
 		os.Exit(1)
