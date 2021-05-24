@@ -11,6 +11,7 @@ import (
 
 type Connection struct {
 	Client *anaconda.TwitterApi
+	Credentials Credentials
 
 	logFile       *os.File
 	logStdoutFile *os.File
@@ -26,10 +27,10 @@ func NewConnection(c Credentials, logFile, logOutFile, logErrFile *os.File) (*Co
 	anacondaClient := anaconda.NewTwitterApiWithCredentials(c.AccessToken, c.AccessSecret, c.APIKey, c.APISecret)
 
 	newConn := Connection{Client: anacondaClient, CreationTime: time.Now().Unix()}
+	newConn.Credentials = c
 	newConn.logFile = logFile
 	newConn.logStdoutFile = logOutFile
 	newConn.logStdErrFile = logErrFile
-	//newConn.Client.
 
 	infoMW := io.MultiWriter(logFile, logOutFile)
 	errMW := io.MultiWriter(logFile, logErrFile)
@@ -48,4 +49,10 @@ func NewConnection(c Credentials, logFile, logOutFile, logErrFile *os.File) (*Co
 		newConn.InfoLog.Printf("Connection is successfully established for Twitter user: %v\n", screenName)
 	}
 	return &newConn, err
+}
+
+func (c *Connection) Reconnect(){
+	cr := c.Credentials
+	anacondaClient := anaconda.NewTwitterApiWithCredentials(cr.AccessToken, cr.AccessSecret, cr.APIKey, cr.APISecret)
+	c.Client = anacondaClient
 }
