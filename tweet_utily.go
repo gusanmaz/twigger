@@ -21,7 +21,7 @@ func (t Tweet) GetTextURLs() []string {
 	urls := []string{}
 	if t.Entities.Urls != nil {
 		for _, v := range t.Entities.Urls {
-			urls = append(urls, v.Display_url)
+			urls = append(urls, v.Url)
 		}
 	}
 	return urls
